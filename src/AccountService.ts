@@ -9,18 +9,18 @@ export default class AccountService {
 		this.cpfValidator = new CpfValidator();
 	}
 
-	async sendEmail (email: string, subject: string, message: string) {
+	private async sendEmail (email: string, subject: string, message: string) {
 		console.log(email, subject, message);
 	}
 
-	async signup (input: any) {
+	async signup (input: SignUpInput) {
     if(!input.isDriver && !input.isPassenger) throw new Error("Account type is not defined");
     if (!input.name.match(/[a-zA-Z] [a-zA-Z]+/)) throw new Error("Invalid name");
     if (!input.email.match(/^(.+)@(.+)$/)) throw new Error("Invalid email");
     if (!this.cpfValidator.validate(input.cpf)) throw new Error("Invalid cpf");
-    if (input.isDriver && !input.carPlate.match(/[A-Z]{3}[0-9]{4}/)) throw new Error("Invalid plate");
+    if (input.isDriver && !input.carPlate?.match(/[A-Z]{3}[0-9]{4}/)) throw new Error("Invalid plate");
     if (input.isPassenger) {
-      input.carPlate = null;
+      input.carPlate = undefined;
     }
 
 		const connection = pgp()("postgres://postgres:workdb123@localhost:5432/ride_ddd");
@@ -47,4 +47,13 @@ export default class AccountService {
 		await connection.$pool.end();
 		return account;
 	}
+}
+
+type SignUpInput = {
+  name: string,
+  email: string,
+  cpf: string,
+  carPlate?: string,
+  isPassenger?: boolean,
+  isDriver?: boolean,
 }
