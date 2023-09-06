@@ -1,9 +1,22 @@
+import { faker } from "@faker-js/faker";
 import AccountService from "../src/AccountService";
+
+
+function randomName(){
+	return faker.person.fullName()
+}
+
+function randomEmail(){
+	return faker.internet.email()
+}
+
+
+
 
 test("Deve criar um passageiro", async function () {
 	const input = {
-		name: "John Doe",
-		email: `john.doe${Math.random()}@gmail.com`,
+		name: randomName(),
+		email: randomEmail(),
 		cpf: "95818705552",
 		isPassenger: true
 	}
@@ -17,10 +30,10 @@ test("Deve criar um passageiro", async function () {
 	expect(account.cpf).toBe(input.cpf);
 });
 
-test("Não deve criar um passageiro com cpf inválido", async function () {
+test("Não deve criar uma conta com cpf inválido", async function () {
 	const input = {
-		name: "John Doe",
-		email: `john.doe${Math.random()}@gmail.com`,
+		name: randomName(),
+		email: randomEmail(),
 		cpf: "95818705500",
 		isPassenger: true
 	}
@@ -28,10 +41,10 @@ test("Não deve criar um passageiro com cpf inválido", async function () {
 	await expect(() => accountService.signup(input)).rejects.toThrow(new Error("Invalid cpf"));
 });
 
-test("Não deve criar um passageiro com nome inválido", async function () {
+test("Não deve criar uma conta com nome inválido", async function () {
 	const input = {
 		name: "John",
-		email: `john.doe${Math.random()}@gmail.com`,
+		email: randomEmail(),
 		cpf: "95818705552",
 		isPassenger: true
 	}
@@ -39,10 +52,10 @@ test("Não deve criar um passageiro com nome inválido", async function () {
 	await expect(() => accountService.signup(input)).rejects.toThrow(new Error("Invalid name"));
 });
 
-test("Não deve criar um passageiro com email inválido", async function () {
+test("Não deve criar uma conta com email inválido", async function () {
 	const input = {
-		name: "John Doe",
-		email: `john.doe${Math.random()}@`,
+		name: randomName(),
+		email: `john.doe@`,
 		cpf: "95818705552",
 		isPassenger: true
 	}
@@ -50,10 +63,10 @@ test("Não deve criar um passageiro com email inválido", async function () {
 	await expect(() => accountService.signup(input)).rejects.toThrow(new Error("Invalid email"));
 });
 
-test("Não deve criar um passageiro com conta existente", async function () {
+test("Não deve criar uma conta com email existente", async function () {
 	const input = {
-		name: "John Doe",
-		email: `john.doe${Math.random()}@gmail.com`,
+		name: randomName(),
+		email: randomEmail(),
 		cpf: "95818705552",
 		isPassenger: true
 	}
@@ -64,8 +77,8 @@ test("Não deve criar um passageiro com conta existente", async function () {
 
 test("Deve criar um motorista", async function () {
 	const input = {
-		name: "John Doe",
-		email: `john.doe${Math.random()}@gmail.com`,
+		name: randomName(),
+		email: randomEmail(),
 		cpf: "95818705552",
 		carPlate: "AAA9999",
 		isDriver: true
@@ -77,8 +90,8 @@ test("Deve criar um motorista", async function () {
 
 test("Não deve criar um motorista com place do carro inválida", async function () {
 	const input = {
-		name: "John Doe",
-		email: `john.doe${Math.random()}@gmail.com`,
+		name: randomName(),
+		email: randomEmail(),
 		cpf: "95818705552",
 		carPlate: "AAA999",
 		isDriver: true
@@ -89,8 +102,8 @@ test("Não deve criar um motorista com place do carro inválida", async function
 
 test("Não deve criar uma conta na qual o tipo não esteja definido", async function () {
 	const input = {
-		name: "John Doe",
-		email: `john.doe${Math.random()}@gmail.com`,
+		name: randomName(),
+		email: randomEmail(),
 		cpf: "95818705552",
 	}
 	const accountService = new AccountService();
@@ -100,8 +113,8 @@ test("Não deve criar uma conta na qual o tipo não esteja definido", async func
 
 test("Não deve salvar a placa caso seja um passageiro ", async function () {
 	const input = {
-		name: "John Doe",
-		email: `john.doe${Math.random()}@gmail.com`,
+		name: randomName(),
+		email: randomEmail(),
 		cpf: "95818705552",
 		carPlate: "AAA9999",
 		isPassenger: true,

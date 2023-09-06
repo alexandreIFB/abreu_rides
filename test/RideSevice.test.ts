@@ -40,15 +40,18 @@ test("Deve solicitar uma corrida", async function () {
 
 	const rideService = new RideService();
   const output = await rideService.callRide(input);
+  expect(output.rideId).toBeDefined();
+
 	const ride = await rideService.getRide(output.rideId);
 	expect(ride.ride_id).toBeDefined();
-	expect(ride.passengerId).toBe(input.passengerId);
-	expect(ride.driverId).toBe(input.driverId);
-	expect(ride.fare).toBe(2);
-	expect(ride.from_lat).toBe(input.from.lat);
-	expect(ride.from_long).toBe(input.from.long);
-  expect(ride.to_lat).toBe(input.to.lat);
-	expect(ride.to_long).toBe(input.to.long);
+	expect(ride.passenger_id).toBe(input.passengerId);
+	expect(ride.driver_id).toBe(input.driverId);
+	expect(ride.fare).toBe("2");
+	expect(ride.distance).toBe("10");
+	expect(ride.from_lat).toBe(input.from.lat.toString());
+	expect(ride.from_long).toBe(input.from.long.toString());
+  expect(ride.to_lat).toBe(input.to.lat.toString());
+	expect(ride.to_long).toBe(input.to.long.toString());
 	expect(ride.status).toBe("requested");
 	expect(ride.date).toBeDefined()
 	expect(ride.date).toBeInstanceOf(Date);
